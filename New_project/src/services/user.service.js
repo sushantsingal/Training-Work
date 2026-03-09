@@ -47,7 +47,7 @@ const loginUser = async (payload) => {
 const registerUser = async (data) => {
     const { username, email, password } = data;
 
-    const existingUser = await userDAO.findUserByEmail(email);
+    const existingUser = await userDao.findUserByEmail(email);
     if (existingUser) {
         const error = new Error("User already exists");
         error.status = 400;
@@ -56,7 +56,7 @@ const registerUser = async (data) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await userDAO.createUser({
+    const user = await userDao.createUser({
         username,
         email,
         password: hashedPassword
