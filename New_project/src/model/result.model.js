@@ -5,7 +5,12 @@ const ResultSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    semester: {
+        type: String,
+        required: true,
+    },
     subjects: [{
+        _id: false,
         subjectName: {
             type:String,
             required:true

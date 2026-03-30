@@ -3,7 +3,6 @@ const {getEntityById} = require('../DAO/user.dao');
 const { getPublicKey } = require('../core/utils');
 
 const publicKey = getPublicKey();
-
 const authenticate = async (req, res, next) => {
     try{
         const token = req.headers('Authorization').replace('Bearer ', '');
@@ -56,4 +55,63 @@ const authenticate = async (req, res, next) => {
     }
 };
 
-module.exports = authenticate;
+const adminAuthMiddleware = async (req, res, next) => {
+    try {
+        const user = req.user;
+
+        if (!user) {
+            return res.status(401).json({ message: 'Unauthorized: No user found' });
+        }
+
+        if (user.role !== 'ADMIN') {
+            return res.status(403).json({ message: 'Forbidden: Admin access required' });
+        }
+
+        next();
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+const studentAuthMiddleware = async (req, res, next) => {
+    try {
+        const user = req.user;
+
+        if (!user) {
+            return res.status(401).json({ message: 'Unauthorized: No user found' });
+        }
+
+        if (user.role !== 'STUDENT') {
+            return res.status(403).json({ message: 'Forbidden: Student access required' });
+        }
+
+        next();
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+const teacherAuthMiddleware = async (req, res, next) => {
+    try {
+        const user = req.user;
+
+        if (!user) {
+            return res.status(401).json({ message: 'Unauthorized: No user found' });
+        }
+
+        if (user.role !== 'TEACHER') {
+            return res.status(403).json({ message: 'Forbidden: Teacher access required' });
+        }
+
+        next();
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+module.exports = {
+    authenticate,
+    adminAuthMiddleware,
+    studentAuthMiddleware,
+    teacherAuthMiddleware
+}

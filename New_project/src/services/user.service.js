@@ -1,4 +1,4 @@
-const {userDao} = require("../DAO");
+const { userDao } = require("../DAO");
 const {hashPassword, getPrivateKey} = require("../core/utils");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -17,7 +17,7 @@ const loginUser = async (payload) => {
                 status: 404
             }
         }
-        const user = users(0);
+        const user = users[0];
 
         const isPasswordValid = await bcrypt.compare(payload.password, user.password);
         if(!isPasswordValid){
@@ -56,7 +56,7 @@ const registerUser = async (data) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await userDao.createUser({
+    const user = await userDao.createEntity({
         username,
         email,
         password: hashedPassword

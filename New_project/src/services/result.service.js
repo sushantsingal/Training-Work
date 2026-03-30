@@ -11,8 +11,18 @@ const getResultById = async (id) => {
 }
 
 const createResult = async (data) => {
-    const createResult = await resultDao.createEntity(data);
-    return createResult;
+    resultDao.subject = data.subjects.map(subject => {
+        result.totalMarks = result.totalMarks + subject.marks;
+        return {
+            ...subject,
+            grade,
+        };
+    });
+
+    result.percentage = (result.totalMarks / (data.subjects.length * 100)) * 100;
+
+    result.overallGrades = calculateGrads(result.percentage);
+    result.status = result.overallGrades !== 'F' ? 'Pass' : 'Fail';
 }
 
 const updateResult = async (filters, data) => {

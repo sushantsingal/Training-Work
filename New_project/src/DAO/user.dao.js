@@ -18,11 +18,6 @@ const getEntities = async (searchParams) => {
     }
 }
 
-const findUserByEmail = async (email) => {
-    return await User.findOne({ email });
-};
-
-
 const getEntityById = async (id) => {
 
     try{
@@ -67,7 +62,6 @@ const deleteEntity = async (id) => {
 }
 
 module.exports = {
-    findUserByEmail,
     getEntities,
     getEntityById,
     createEntity,

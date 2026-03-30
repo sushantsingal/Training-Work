@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const authenticate = require('../../middleware/auth.middleware');
+const {adminAuthMiddleware} = require('../../middleware/auth.middleware');
 const { collegeService } = require('../../services');
 
-router.get('/colleges', authenticate, async (req, res) => {
+router.get('/colleges', authenticate.adminAuthMiddleware, async (req, res) => {
     try {
         const searchParams = req.query;
         const result= await collegeService.getColleges(searchParams);
@@ -17,7 +17,7 @@ router.get('/colleges', authenticate, async (req, res) => {
     }
 });
 
-router.get('/college/:id', authenticate, async (req, res) => {
+router.get('/college/:id', authenticate.adminAuthMiddleware, async (req, res) => {
     try {
         const college = await collegeService.getCollegeList(req.query);
         res.json({ college });
@@ -27,7 +27,7 @@ router.get('/college/:id', authenticate, async (req, res) => {
     }
 });
 
-router.post('/college', authenticate, async (req, res) => {
+router.post('/college', authenticate.adminAuthMiddleware, async (req, res) => {
     try {
         const payload = req.body;
         const result = await collegeService.createCollege(payload);
@@ -38,7 +38,7 @@ router.post('/college', authenticate, async (req, res) => {
     }
 });
 
-router.patch('/college/:id', authenticate, async (req, res) => {
+router.patch('/college/:id', authenticate.adminAuthMiddleware, async (req, res) => {
     try {
         const userId = req.params.id;
         const payload = req.body;
@@ -50,7 +50,7 @@ router.patch('/college/:id', authenticate, async (req, res) => {
     }
 });
 
-router.delete('/college/:id', authenticate, async (req, res) => {
+router.delete('/college/:id', authenticate.adminAuthMiddleware, async (req, res) => {
     try {
         const userId = req.params.id;
         const result = await collegeService.deleteCollege(userId);
